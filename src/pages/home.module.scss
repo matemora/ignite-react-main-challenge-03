@@ -1,37 +1,18 @@
-.headerContainer {
-  height: 5rem;
-  display: flex;
-  align-items: center;
-}
+.loadMore {
+  margin-top: 4rem;
 
-.headerContent {
-  width: 100%;
-  max-width: 1120px;
-  margin: 0 auto;
-}
+  button {
+    background: transparent;
+    border: none;
+    padding: 0.5rem 0 0.5rem;
+    color: var(--highlight);
+    font-size: 1.125rem;
+    font-weight: 600;
+    transition: filter 0.2s;
 
-.mainContainer {
-  max-width: 1120px;
-  margin: 0 auto;
-  padding: 0 2rem;
-
-  footer {
-    margin-top: 4rem;
-
-    button {
-      background: transparent;
-      border: none;
-      padding: 0.5rem 0 0.5rem;
-      color: var(--highlight);
-      font-size: 1.125rem;
-      font-weight: 600;
-      transition: filter 0.2s;
-
-      &:hover {
-        filter: brightness(0.8);
-      }
+    &:hover {
+      filter: brightness(0.8);
     }
-
   }
 }
 
@@ -72,6 +53,11 @@
           margin-left: 0.5rem;
         }
       }
+    }
+    transition: color 0.2s;
+
+    &:hover {
+      color: var(--highlight);
     }
   }
 }
