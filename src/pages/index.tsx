@@ -43,11 +43,7 @@ export default function Home({
     setNextPage(newPosts.next_page);
     setPosts(prev => [...prev, ...newPosts.results.map(post => ({
       uid: post.uid,
-      first_publication_date: new Date(post.first_publication_date).toLocaleDateString('pt-BR', {
-        day: '2-digit',
-        month: 'short',
-        year: 'numeric',
-      }),
+      first_publication_date: formatDateString(post.first_publication_date),
       data: {
         ...post.data,
       },
@@ -70,7 +66,7 @@ export default function Home({
                 <footer>
                   <span className={styles.postInfo}>
                     <FiCalendar />
-                    <time>{post.first_publication_date}</time>
+                    <time>{formatDateString(post.first_publication_date)}</time>
                   </span>
                   <span className={styles.postInfo}>
                     <FiUser />
@@ -106,7 +102,7 @@ export const getStaticProps: GetStaticProps = async () => {
     results: postsResponse.results.map(result => {
       return {
         uid: result.uid,
-        first_publication_date: formatDateString(result.first_publication_date),
+        first_publication_date: result.first_publication_date,
         data: {
           ...result.data,
         },

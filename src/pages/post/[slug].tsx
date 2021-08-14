@@ -10,6 +10,8 @@ import styles from './post.module.scss';
 import { formatDateString } from '../../utils/formatDateString';
 import { RichText } from 'prismic-dom';
 import { FiCalendar, FiClock, FiUser } from 'react-icons/fi';
+import { calculateEstimatedReadingTime } from '../../utils/calculateEstimatedReadingTime';
+import { useRouter } from 'next/router';
 
 interface Post {
   first_publication_date: string | null;
@@ -26,7 +28,6 @@ interface Post {
       }[];
     }[];
   };
-  estimatedReadingTime: number;
 }
 
 interface PostProps {
@@ -36,6 +37,12 @@ interface PostProps {
 export default function Post({
   post,
 }: PostProps) {
+  const router = useRouter()
+
+  if (router.isFallback) {
+    return <div>Carregando...</div>
+  }
+
   return (
     <>
       <Head>
@@ -53,7 +60,7 @@ export default function Post({
           <div className={styles.postInfo}>
             <span>
               <FiCalendar />
-              <time>{post.first_publication_date}</time>
+              <time>{formatDateString(post.first_publication_date)}</time>
             </span>
             <span>
               <FiUser />
@@ -61,13 +68,13 @@ export default function Post({
             </span>
             <span>
               <FiClock />
-              <span>{post.estimatedReadingTime} min</span>
+              <span>{calculateEstimatedReadingTime(post.data.content.map(content => RichText.asText(content.body)))} min</span>
             </span>
           </div>
           {post.data.content.map(content => (
             <section key={content.heading}>
               <h2>{content.heading}</h2>
-              <div className={styles.postContent} dangerouslySetInnerHTML={{ __html: content.body[0].text }} />
+              <div className={styles.postContent} dangerouslySetInnerHTML={{ __html: RichText.asHtml(content.body) }} />
             </section>
           ))}
         </article>
@@ -87,7 +94,11 @@ export const getStaticPaths: GetStaticPaths = async () => {
   );
 
   return {
-    paths: posts.results.map(post => `/post/${post.uid}`),
+    paths: posts.results.map(post => ({
+      params: {
+        slug: post.uid,
+      }
+    })),
     fallback: true,
   }
 };
@@ -98,19 +109,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   return {
     props: {
       post: {
-        first_publication_date: formatDateString(response.first_publication_date),
-        data: {
-          ...response.data,
-          content: response.data.content.map(content => {
-            return {
-              heading: content.heading,
-              body: [{
-                text: RichText.asHtml(content.body),
-              }],
-            };
-          }),
-        },
-        estimatedReadingTime: 4,
+        ...response,
       },
     },
   };

@@ -1,7 +1,6 @@
+import { format } from "date-fns";
+import ptLocale from 'date-fns/locale/pt-BR';
+
 export function formatDateString(date: string) {
-  return new Date(date).toLocaleDateString('pt-BR', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric',
-  })
+  return format(new Date(date), "dd MMM yyyy", {locale: ptLocale});
 }

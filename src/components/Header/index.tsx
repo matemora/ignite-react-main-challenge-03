@@ -1,6 +1,4 @@
-import Image from 'next/image';
 import Link from 'next/link';
-import logo from '../../../public/images/logo.svg';
 
 import styles from './header.module.scss';
 
@@ -10,7 +8,7 @@ export default function Header() {
       <div className={styles.headerContent}>
         <Link href="/">
           <a>
-            <Image src={logo} alt="logo" height={26} />
+            <img src="../../../public/images/logo.png" alt="logo" width={260} />
           </a>
         </Link>
       </div>
